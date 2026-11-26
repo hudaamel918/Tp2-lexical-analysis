@@ -1,0 +1,12 @@
+Identifier DFA
+State             letter      underscore           digit       other (-)   Accepting?
+q0                    q1              q1          REJECT          REJECT   no
+q1                    q1              q1              q1          REJECT   yes
+
+Number DFA
+State              digit             '.'       other (a)   Accepting?
+q0                    q1          REJECT          REJECT   no
+q1                    q1              q2          REJECT   yes
+q2                    q3          REJECT          REJECT   no
+q3                    q3          REJECT          REJECT   yes
+

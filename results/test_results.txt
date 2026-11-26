@@ -1,0 +1,155 @@
+====================================================================== 
+TEST RESULTS (token sequences)
+======================================================================
+
+[V1 declarations]  input = 'int total = 25;\nfloat average = 3.5;'
+  regex : KEYWORD('int') IDENTIFIER('total') OPERATOR('=') INTEGER('25') SEPARATOR(';') KEYWORD('float') IDENTIFIER('average') OPERATOR('=') REAL('3.5') SEPARATOR(';')
+  FA    : KEYWORD('int') IDENTIFIER('total') OPERATOR('=') INTEGER('25') SEPARATOR(';') KEYWORD('float') IDENTIFIER('average') OPERATOR('=') REAL('3.5') SEPARATOR(';')
+  SAME  : True
+
+[V2 expression]  input = 'x = (a + b2) * 3.14 - _tmp / 10;'
+  regex : IDENTIFIER('x') OPERATOR('=') SEPARATOR('(') IDENTIFIER('a') OPERATOR('+') IDENTIFIER('b2') SEPARATOR(')') OPERATOR('*') REAL('3.14') OPERATOR('-') IDENTIFIER('_tmp') OPERATOR('/') INTEGER('10') SEPARATOR(';')
+  FA    : IDENTIFIER('x') OPERATOR('=') SEPARATOR('(') IDENTIFIER('a') OPERATOR('+') IDENTIFIER('b2') SEPARATOR(')') OPERATOR('*') REAL('3.14') OPERATOR('-') IDENTIFIER('_tmp') OPERATOR('/') INTEGER('10') SEPARATOR(';')
+  SAME  : True
+
+[V3 if/else]  input = 'if (x >= 10 && y != 0) { return x; } else { return 0; }'
+  regex : KEYWORD('if') SEPARATOR('(') IDENTIFIER('x') OPERATOR('>=') INTEGER('10') OPERATOR('&&') IDENTIFIER('y') OPERATOR('!=') INTEGER('0') SEPARATOR(')') SEPARATOR('{') KEYWORD('return') IDENTIFIER('x') SEPARATOR(';') SEPARATOR('}') KEYWORD('else') SEPARATOR('{') KEYWORD('return') INTEGER('0') SEPARATOR(';') SEPARATOR('}')
+  FA    : KEYWORD('if') SEPARATOR('(') IDENTIFIER('x') OPERATOR('>=') INTEGER('10') OPERATOR('&&') IDENTIFIER('y') OPERATOR('!=') INTEGER('0') SEPARATOR(')') SEPARATOR('{') KEYWORD('return') IDENTIFIER('x') SEPARATOR(';') SEPARATOR('}') KEYWORD('else') SEPARATOR('{') KEYWORD('return') INTEGER('0') SEPARATOR(';') SEPARATOR('}')
+  SAME  : True
+
+[V4 while loop]  input = 'while (i <= 100) { i = i + 1; }'
+  regex : KEYWORD('while') SEPARATOR('(') IDENTIFIER('i') OPERATOR('<=') INTEGER('100') SEPARATOR(')') SEPARATOR('{') IDENTIFIER('i') OPERATOR('=') IDENTIFIER('i') OPERATOR('+') INTEGER('1') SEPARATOR(';') SEPARATOR('}')
+  FA    : KEYWORD('while') SEPARATOR('(') IDENTIFIER('i') OPERATOR('<=') INTEGER('100') SEPARATOR(')') SEPARATOR('{') IDENTIFIER('i') OPERATOR('=') IDENTIFIER('i') OPERATOR('+') INTEGER('1') SEPARATOR(';') SEPARATOR('}')
+  SAME  : True
+
+[V5 operators]  input = 'a == b != c <= d >= e < f > g || h && i ! j'
+  regex : IDENTIFIER('a') OPERATOR('==') IDENTIFIER('b') OPERATOR('!=') IDENTIFIER('c') OPERATOR('<=') IDENTIFIER('d') OPERATOR('>=') IDENTIFIER('e') OPERATOR('<') IDENTIFIER('f') OPERATOR('>') IDENTIFIER('g') OPERATOR('||') IDENTIFIER('h') OPERATOR('&&') IDENTIFIER('i') OPERATOR('!') IDENTIFIER('j')
+  FA    : IDENTIFIER('a') OPERATOR('==') IDENTIFIER('b') OPERATOR('!=') IDENTIFIER('c') OPERATOR('<=') IDENTIFIER('d') OPERATOR('>=') IDENTIFIER('e') OPERATOR('<') IDENTIFIER('f') OPERATOR('>') IDENTIFIER('g') OPERATOR('||') IDENTIFIER('h') OPERATOR('&&') IDENTIFIER('i') OPERATOR('!') IDENTIFIER('j')
+  SAME  : True
+
+[V6 numbers]  input = '0 7 100 0.5 3.14 25'
+  regex : INTEGER('0') INTEGER('7') INTEGER('100') REAL('0.5') REAL('3.14') INTEGER('25')
+  FA    : INTEGER('0') INTEGER('7') INTEGER('100') REAL('0.5') REAL('3.14') INTEGER('25')
+  SAME  : True
+
+[V7 identifiers]  input = 'x total _value value2 __ a_b_c'
+  regex : IDENTIFIER('x') IDENTIFIER('total') IDENTIFIER('_value') IDENTIFIER('value2') IDENTIFIER('__') IDENTIFIER('a_b_c')
+  FA    : IDENTIFIER('x') IDENTIFIER('total') IDENTIFIER('_value') IDENTIFIER('value2') IDENTIFIER('__') IDENTIFIER('a_b_c')
+  SAME  : True
+
+[V8 empty / blank]  input = '   \n\t  '
+  regex : 
+  FA    : 
+  SAME  : True
+
+[I1 at sign]  input = 'int x = 5 @ 3;'
+  regex : KEYWORD('int') IDENTIFIER('x') OPERATOR('=') INTEGER('5') INVALID('@') INTEGER('3') SEPARATOR(';')
+  FA    : KEYWORD('int') IDENTIFIER('x') OPERATOR('=') INTEGER('5') INVALID('@') INTEGER('3') SEPARATOR(';')
+  SAME  : True
+
+[I2 digit-first identifier]  input = 'int 2value = 10;'
+  regex : KEYWORD('int') INTEGER('2') IDENTIFIER('value') OPERATOR('=') INTEGER('10') SEPARATOR(';')
+  FA    : KEYWORD('int') INTEGER('2') IDENTIFIER('value') OPERATOR('=') INTEGER('10') SEPARATOR(';')
+  SAME  : True
+
+[I3 hyphen in word]  input = 'total-amount'
+  regex : IDENTIFIER('total') OPERATOR('-') IDENTIFIER('amount')
+  FA    : IDENTIFIER('total') OPERATOR('-') IDENTIFIER('amount')
+  SAME  : True
+
+[I4 bad symbols]  input = 'a # b $ c ~ d'
+  regex : IDENTIFIER('a') INVALID('#') IDENTIFIER('b') INVALID('$') IDENTIFIER('c') INVALID('~') IDENTIFIER('d')
+  FA    : IDENTIFIER('a') INVALID('#') IDENTIFIER('b') INVALID('$') IDENTIFIER('c') INVALID('~') IDENTIFIER('d')
+  SAME  : True
+
+[I5 lone & and |]  input = 'a & b | c'
+  regex : IDENTIFIER('a') INVALID('&') IDENTIFIER('b') INVALID('|') IDENTIFIER('c')
+  FA    : IDENTIFIER('a') INVALID('&') IDENTIFIER('b') INVALID('|') IDENTIFIER('c')
+  SAME  : True
+
+[I6 trailing dot]  input = 'x = 12.;'
+  regex : IDENTIFIER('x') OPERATOR('=') INTEGER('12') INVALID('.') SEPARATOR(';')
+  FA    : IDENTIFIER('x') OPERATOR('=') INTEGER('12') INVALID('.') SEPARATOR(';')
+  SAME  : True
+
+[I7 leading dot]  input = 'y = .5;'
+  regex : IDENTIFIER('y') OPERATOR('=') INVALID('.') INTEGER('5') SEPARATOR(';')
+  FA    : IDENTIFIER('y') OPERATOR('=') INVALID('.') INTEGER('5') SEPARATOR(';')
+  SAME  : True
+
+[I8 digits then letters]  input = '12a 3.5abc'
+  regex : INTEGER('12') IDENTIFIER('a') REAL('3.5') IDENTIFIER('abc')
+  FA    : INTEGER('12') IDENTIFIER('a') REAL('3.5') IDENTIFIER('abc')
+  SAME  : True
+
+[I9 double dot]  input = '1.2.3'
+  regex : REAL('1.2') INVALID('.') INTEGER('3')
+  FA    : REAL('1.2') INVALID('.') INTEGER('3')
+  SAME  : True
+
+[I10 Unicode digit]  input = 'x = ٣;'
+  regex : IDENTIFIER('x') OPERATOR('=') INVALID('٣') SEPARATOR(';')
+  FA    : IDENTIFIER('x') OPERATOR('=') INVALID('٣') SEPARATOR(';')
+  SAME  : True
+
+====================================================================== 
+COMPARISON TABLE
+======================================================================
+Test case                    Equivalent?  Invalid characters detected (char@pos)
+V1 declarations              YES          []
+V2 expression                YES          []
+V3 if/else                   YES          []
+V4 while loop                YES          []
+V5 operators                 YES          []
+V6 numbers                   YES          []
+V7 identifiers               YES          []
+V8 empty / blank             YES          []
+I1 at sign                   YES          [('@', 10)]
+I2 digit-first identifier    YES          []
+I3 hyphen in word            YES          []
+I4 bad symbols               YES          [('#', 2), ('$', 6), ('~', 10)]
+I5 lone & and |              YES          [('&', 2), ('|', 6)]
+I6 trailing dot              YES          [('.', 6)]
+I7 leading dot               YES          [('.', 4)]
+I8 digits then letters       YES          []
+I9 double dot                YES          [('.', 3)]
+I10 Unicode digit            YES          [('٣', 4)]
+
+All equivalent: True
+
+====================================================================== 
+WHOLE-STRING RECOGNIZERS (TP 2 sections 2 and 3)
+======================================================================
+is_identifier('total') -> True
+is_identifier('_value') -> True
+is_identifier('x2') -> True
+is_identifier('2value') -> False
+is_identifier('total!') -> False
+is_identifier('') -> False
+is_identifier('total-x') -> False
+is_identifier('total2') -> True
+is_identifier('2total') -> False
+recognize_number('25') -> INTEGER
+recognize_number('100') -> INTEGER
+recognize_number('3.14') -> REAL
+recognize_number('0.5') -> REAL
+recognize_number('12.') -> None
+recognize_number('.5') -> None
+recognize_number('12a') -> None
+
+====================================================================== 
+CASES WHERE IMPLEMENTATIONS CAN DIFFER
+======================================================================
+Input: 'x = ٣;'
+  regex using \d/\w : ['x', '=', '٣', ';']
+  our FA (ASCII only): [('IDENTIFIER', 'x'), ('OPERATOR', '='), ('INVALID', '٣'), ('SEPARATOR', ';')]
+Input: '3.14'
+  regex with INTEGER before REAL: ['3', '.', '14']
+  our FA: [('REAL', '3.14')]
+
+====================================================================== 
+BENCHMARK (pure CPython, 20 repeats)
+======================================================================
+input size: 100800 characters
+  regex :    20.81 ms
+  FA    :    23.70 ms
